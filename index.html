@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6f8f5" />
+  <title>Align — Posture Check</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#17251f;--muted:#718078;--line:#e4eae5;--paper:#f6f8f5;--white:#fff;--green:#287653;--green-soft:#e8f4ec;--red:#c45b4c;--red-soft:#fff0ed;--lime:#d9edc5}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}
+    button{font:inherit;cursor:pointer}.shell{max-width:1180px;margin:auto;padding:0 28px}
+    header{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:11px;font-family:Manrope,sans-serif;font-weight:800;font-size:21px;letter-spacing:-.8px}
+    .brand-mark{width:34px;height:34px;border-radius:12px;background:var(--green);display:grid;place-items:center;color:white}
+    .brand-mark svg{width:20px}.nav-note{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#9aaba0}
+    main{padding:48px 0 70px}.eyebrow{color:var(--green);font-weight:700;font-size:11px;letter-spacing:1.8px;text-transform:uppercase}
+    h1{font:800 clamp(36px,5vw,56px)/1.04 Manrope,sans-serif;letter-spacing:-2.8px;margin:14px 0 12px;max-width:650px}
+    .intro{color:var(--muted);font-size:16px;line-height:1.65;max-width:620px;margin:0}
+    .topline{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px}
+    .privacy{font-size:12px;color:var(--muted);display:flex;gap:7px;align-items:center;white-space:nowrap;padding-bottom:5px}
+    .privacy svg{width:15px}
+    .dashboard{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr);gap:20px;align-items:stretch}
+    .panel{background:var(--white);border:1px solid var(--line);border-radius:22px;box-shadow:0 8px 30px rgba(25,50,35,.035)}
+    .camera-panel{padding:18px}.panel-head{display:flex;align-items:center;justify-content:space-between;padding:3px 3px 15px}
+    .panel-title{font:700 15px Manrope,sans-serif}.camera-state{font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center}
+    .camera-state i{width:7px;height:7px;border-radius:50%;background:#a8b5ad}
+    .camera-stage{position:relative;background:#18231e;border-radius:15px;overflow:hidden;aspect-ratio:4/3;display:grid;place-items:center}
+    #output{width:100%;height:100%;object-fit:cover;display:block}
+    .camera-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#dce8df;text-align:center;padding:24px}
+    .camera-placeholder svg{width:44px;height:44px;opacity:.8;margin-bottom:15px}
+    .camera-placeholder strong{font:700 15px Manrope,sans-serif}.camera-placeholder span{font-size:12px;color:#aebdb3;margin-top:7px}
+    .camera-actions{display:flex;gap:10px;margin-top:15px}.btn{border:0;border-radius:11px;padding:12px 18px;font-weight:700;font-size:13px;transition:.2s}
+    .btn-primary{background:var(--green);color:white}.btn-primary:hover{background:#1d6042;transform:translateY(-1px)}
+    .btn-quiet{background:#f1f5f1;color:var(--ink)}.btn-quiet:hover{background:#e8eee9}
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .side{display:flex;flex-direction:column;gap:20px}.result-panel{padding:22px;flex:1}
+    .result-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:700}
+    .status-card{margin-top:15px;border-radius:16px;padding:18px;background:#f2f5f2;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;transition:.25s}
+    .status-card.good{background:var(--green-soft)}.status-card.bad{background:var(--red-soft)}
+    .status-top{display:flex;justify-content:space-between;align-items:center}
+    .status-icon{width:36px;height:36px;border-radius:12px;background:#fff;display:grid;place-items:center}
+    .status-icon svg{width:19px;height:19px}
+    .status-word{font:800 25px Manrope,sans-serif;letter-spacing:-1px;margin-top:13px}
+    .status-copy{font-size:12px;color:var(--muted);margin-top:4px}
+    .status-card.good .status-word{color:var(--green)}.status-card.bad .status-word{color:var(--red)}
+    .confidence{font-size:12px;font-weight:700;color:var(--muted)}
+    .meter-list{display:grid;gap:17px;margin-top:23px}
+    .meter-head{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:8px}
+    .meter-head span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+    .track{height:8px;border-radius:20px;background:#edf1ed;overflow:hidden}.fill{height:100%;width:0;border-radius:20px;transition:width .25s}
+    #properFill{background:var(--green)}#badFill{background:var(--red)}
+    .tip-panel{padding:20px 22px;background:#eef4e9;border:1px solid #e1eadb;border-radius:18px}
+    .tip-head{display:flex;gap:9px;align-items:center;font:700 13px Manrope,sans-serif}
+    .tip-head svg{width:17px;color:var(--green)}.tip-panel p{font-size:12px;line-height:1.65;color:#647466;margin:9px 0 0}
+    .classes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+    .class-card{padding:18px 20px;display:flex;align-items:center;gap:14px}
+    .class-art{width:54px;height:54px;flex:none;border-radius:15px;display:grid;place-items:center}
+    .class-art svg{width:33px;height:33px}.class-art.green{background:var(--green-soft);color:var(--green)}.class-art.red{background:var(--red-soft);color:var(--red)}
+    .class-card strong{display:block;font:700 14px Manrope,sans-serif}.class-card small{display:block;color:var(--muted);font-size:11px;margin-top:4px;line-height:1.5}
+    footer{padding:20px 0 32px;color:#89958d;font-size:11px;line-height:1.6;border-top:1px solid var(--line)}
+    .notice{margin-top:15px;color:var(--muted);font-size:11px;line-height:1.6}
+    @media(max-width:850px){.dashboard{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.result-panel{grid-row:span 2}.topline{align-items:start;flex-direction:column}.privacy{padding:0}}
+    @media(max-width:560px){.shell{padding:0 16px}header{height:68px}.nav-note{font-size:11px}main{padding:34px 0 45px}h1{letter-spacing:-1.8px}.side{display:flex}.classes{gap:10px}.class-card{padding:14px 12px;gap:10px;align-items:flex-start;flex-direction:column}.class-art{width:45px;height:45px}.camera-panel{padding:12px}.camera-actions .btn{flex:1;padding:12px 10px}.privacy{white-space:normal}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 8c1.2-1.3 2.8-2 5-2s3.8.7 5 2M7 16c1.2 1.3 2.8 2 5 2s3.8-.7 5-2"/></svg></div>align<span style="color:var(--green)">.</span></div>
+      <div class="nav-note"><i class="live-dot" id="navDot"></i><span id="navText">POSTURE CHECKER</span></div>
+    </header>
+    <main>
+      <div class="topline">
+        <div><div class="eyebrow">Move well. Feel better.</div><h1>A little check-in for your posture.</h1><p class="intro">Use your camera to see how your sitting posture is looking. Get a simple, real-time reading and a gentle nudge to reset when needed.</p></div>
+        <div class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg>Camera runs in your browser</div>
+      </div>
+      <section class="dashboard">
+        <div class="panel camera-panel">
+          <div class="panel-head"><div class="panel-title">Live camera</div><div class="camera-state"><i id="cameraDot"></i><span id="cameraText">Camera off</span></div></div>
+          <div class="camera-stage">
+            <canvas id="output" width="400" height="300"></canvas>
+            <div class="camera-placeholder" id="placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="13" rx="3"/><circle cx="12" cy="12.5" r="3.2"/><path d="m7 6 1.5-2h7L17 6"/></svg>
+              <strong>Your camera view will appear here</strong><span>Position yourself so your upper body is visible.</span>
+            </div>
+          </div>
+          <div class="camera-actions"><button class="btn btn-primary" id="startBtn">Start camera</button><button class="btn btn-quiet" id="stopBtn" disabled>Stop</button></div>
+          <p class="notice" id="message">Allow camera access when your browser asks. For camera access, open this site on localhost or a secure HTTPS connection.</p>
+        </div>
+        <div class="side">
+          <div class="panel result-panel">
+            <div class="result-label">Your posture right now</div>
+            <div class="status-card" id="statusCard">
+              <div class="status-top"><div class="result-label" id="statusKicker">WAITING FOR CAMERA</div><div class="status-icon" id="statusIcon"><svg viewBox="0 0 24 24" fill="none" stroke="#8b9a90" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg></div></div>
+              <div><div class="status-word" id="statusWord">Ready when you are</div><div class="status-copy" id="statusCopy">Start your camera to check your posture.</div></div>
+            </div>
+            <div class="meter-list">
+              <div><div class="meter-head"><span>Proper posture</span><span id="properValue">—</span></div><div class="track"><div class="fill" id="properFill"></div></div></div>
+              <div><div class="meter-head"><span>Bad posture</span><span id="badValue">—</span></div><div class="track"><div class="fill" id="badFill"></div></div></div>
+            </div>
+          </div>
+          <div class="tip-panel"><div class="tip-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6m-5 4h4m-2-20a7 7 0 0 0-4 12.7c.6.4 1 1 1 1.8h6c0-.8.4-1.4 1-1.8A7 7 0 0 0 12 2Z"/></svg>Quick posture reminder</div><p>Sit back in your chair, keep your shoulders relaxed, and let both feet rest comfortably on the floor. Take movement breaks regularly.</p></div>
+        </div>
+      </section>
+      <section class="classes">
+        <div class="panel class-card"><div class="class-art green"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="20" cy="7" r="4"/><path d="M20 12v11m-8-8 8 3 8-3M20 23l-7 12m7-12 7 12"/></svg></div><div><strong>Proper Posture</strong><small>Class 1 · Balanced, upright position</small></div></div>
+        <div class="panel class-card"><div class="class-art red"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="20" cy="7" r="4"/><path d="M20 12c-4 3-6 5-6 10l7 2-2 9m1-21c4 2 7 4 8 8m-14 2-4 10m11-8 6 8"/></svg></div><div><strong>Bad Posture</strong><small>Class 2 + Bad · Slouched or misaligned position</small></div></div>
+      </section>
+    </main>
+    <footer>Align is an educational posture-awareness tool, not a medical device. Camera processing happens in your browser; video is not uploaded by this page. Results depend on camera angle, lighting, and the examples used to train the model.</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    let model, webcam, rafId = null, running = false, busy = false;
+    const canvas = $("output"), ctx = canvas.getContext("2d");
+    const startBtn = $("startBtn"), stopBtn = $("stopBtn");
+
+    function setMessage(text){ $("message").textContent = text; }
+    function setCameraState(on, text){
+      $("cameraText").textContent = text;
+      $("cameraDot").style.background = on ? "#3b9b69" : "#a8b5ad";
+      $("navDot").style.background = on ? "#3b9b69" : "#9aaba0";
+      $("navText").textContent = on ? "LIVE POSTURE CHECK" : "POSTURE CHECKER";
+    }
+    function showWaiting(){
+      $("statusCard").className = "status-card";
+      $("statusKicker").textContent = "WAITING FOR CAMERA";
+      $("statusWord").textContent = "Ready when you are";
+      $("statusCopy").textContent = "Start your camera to check your posture.";
+      $("statusIcon").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#8b9a90" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>';
+      $("properValue").textContent = $("badValue").textContent = "—";
+      $("properFill").style.width = $("badFill").style.width = "0%";
+    }
+    async function start(){
+      if(running) return;
+      startBtn.disabled = true; startBtn.textContent = "Loading model…";
+      setMessage("Loading your posture model…");
+      try{
+        if(!window.tmPose) throw new Error("The pose-detection library did not load. Check your internet connection and refresh.");
+        model = await tmPose.load("./model.json", "./metadata.json");
+        webcam = new tmPose.Webcam(400, 300, true);
+        await webcam.setup();
+        await webcam.play();
+        canvas.width = 400; canvas.height = 300;
+        running = true; $("placeholder").style.display = "none";
+        startBtn.textContent = "Camera running"; startBtn.disabled = true; stopBtn.disabled = false;
+        setCameraState(true, "Camera on"); setMessage("Keep your upper body in view. The prediction updates continuously.");
+        loop();
+      }catch(err){
+        console.error(err);
+        startBtn.disabled = false; startBtn.textContent = "Try again";
+        setCameraState(false, "Camera off");
+        setMessage(err && err.name === "NotAllowedError" ? "Camera permission was denied. Allow camera access in your browser settings, then try again." : (err.message || "Could not start the camera. Check camera access and try again."));
+        if(webcam){ try{webcam.stop()}catch(e){} webcam=null; }
+      }
+    }
+    function stop(){
+      running = false;
+      if(rafId) cancelAnimationFrame(rafId);
+      if(webcam){ try{webcam.stop()}catch(e){} webcam=null; }
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      $("placeholder").style.display = "flex";
+      startBtn.disabled = false; startBtn.textContent = "Start camera"; stopBtn.disabled = true;
+      setCameraState(false, "Camera off"); setMessage("Camera stopped. Start again whenever you're ready."); showWaiting();
+    }
+    async function loop(){
+      if(!running || busy) return;
+      busy = true;
+      try{
+        webcam.update();
+        const {pose, posenetOutput} = await model.estimatePose(webcam.canvas);
+        const predictions = await model.predict(posenetOutput);
+        // The model's Class 1 is Proper Posture. The remaining two source labels
+        // (Class 2 and Bad) are combined into the single Bad Posture category.
+        const proper = predictions.find(p => p.className === "Class 1")?.probability || 0;
+        const bad = predictions.filter(p => p.className !== "Class 1").reduce((sum,p)=>sum+p.probability,0);
+        renderPrediction(proper, bad);
+        ctx.drawImage(webcam.canvas,0,0,canvas.width,canvas.height);
+        if(pose) tmPose.drawKeypoints(pose.keypoints,0.5,ctx);
+        if(pose) tmPose.drawSkeleton(pose.keypoints,0.5,ctx);
+      }catch(err){ console.error(err); setMessage("Prediction paused. Try refreshing the page and starting the camera again."); stop(); }
+      finally{ busy = false; }
+      if(running) rafId = requestAnimationFrame(loop);
+    }
+    function renderPrediction(proper,bad){
+      const p = Math.round(proper*100), b = Math.round(bad*100);
+      $("properValue").textContent = p+"%"; $("badValue").textContent = b+"%";
+      $("properFill").style.width = p+"%"; $("badFill").style.width = b+"%";
+      const good = proper >= bad;
+      $("statusCard").className = "status-card "+(good?"good":"bad");
+      $("statusKicker").textContent = "LIVE RESULT";
+      $("statusWord").textContent = good ? "Proper Posture" : "Bad Posture";
+      $("statusCopy").textContent = good ? "Nice work. Keep your shoulders relaxed." : "Try sitting taller and gently relaxing your shoulders.";
+      $("statusIcon").innerHTML = good
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="#287653" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="#c45b4c" stroke-width="2"><path d="M12 8v5m0 4h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+    }
+    startBtn.addEventListener("click",start);
+    stopBtn.addEventListener("click",stop);
+    window.addEventListener("beforeunload",()=>{if(webcam)try{webcam.stop()}catch(e){}});
+  </script>
+</body>
+</html>
